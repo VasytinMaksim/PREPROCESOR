@@ -5,18 +5,22 @@ using namespace std;
 
 class Fraction {
 private:
-    int num;
-    int den;
-public:
+    int num; //числитель
+    int den; //знаменатель
+    void reduction() {
+        int n = nod(num, den);
+        num /= n;
+        den /= n;
+    }
     int nod(int x, int y) {
         if (!y)
             return x;
-        nod(y, x / y);
+        nod(y, x % y);
     };
-
+public:
     Fraction() {
         setNum(0);
-        setDen(0);
+        setDen(1);
     }
     Fraction(int n, int m) {
         setNum(n);
@@ -40,73 +44,50 @@ public:
     void print() {
         cout << num << '/' << den << endl;
     }
-    Fraction add(Fraction f) {
-
+    Fraction* add(Fraction f) {
+        Fraction* rez = new Fraction;
+        rez->setNum(num * f.den + den * f.num);
+        rez->setDen(den * f.den);
+        rez->reduction();
+        return rez;
+    }
+    Fraction* sub(Fraction f) {
+        Fraction* rez = new Fraction;
+        rez->setNum(num * f.den - den * f.num);
+        rez->setDen(den * f.den);
+        rez->reduction();
+        return rez;
+    }
+    Fraction* mul(Fraction f) {
+        Fraction* rez = new Fraction;
+        rez->setNum(num * f.num);
+        rez->setDen(den * f.den);
+        rez->reduction();
+        return rez;
+    }
+    Fraction* div(Fraction f) {
+        Fraction* rez = new Fraction;
+        rez->setNum(num * f.den);
+        rez->setDen(den * f.num);
+        rez->reduction();
+        return rez;
     }
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Point {
-private:
-    int x;
-    int y;
-    int z;
-public:
-    Point() {};
-    Point(int x, int y, int z) {
-        setX(x);
-        setY(y);
-        setZ(z);
-    }
-    void setX(int p) {
-        x = p;
-    }
-    void setY(int p) {
-        y = p;
-    }
-    void setZ(int p) {
-        z = p;
-    }
-    int getX() {
-        return x;
-    }
-    int getY() {
-        return y;
-    }
-    int getZ() {
-        return z;
-    }
-    void print() {
-        cout << '(' << x <<  ',' << y << ',' << z << ')' << endl;
-    }
-};
 int main(){
    setlocale(LC_ALL, "ru");
-   Fraction frunction(1, 2);
-   frunction.print();
-
-
-   //Point point(1, 2 ,3);
-   //point.print();
+   Fraction f1(2, 4);
+   f1.print();
+   Fraction f2(12, 18);
+   f2.print();
+   Fraction* pf = f1.add(f2);
+   pf->print();
+   pf = f1.sub(f2);
+   pf->print();
+   pf = f1.mul(f2);
+   pf->print();
+   pf = f1.div(f2);
+   pf->print();
     return 0;
 }
